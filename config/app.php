@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Sistem Informasi Cuti'),
+    'name' => env('APP_NAME', 'Sistem Informasi iCuti'),
 
     /*
     |--------------------------------------------------------------------------
