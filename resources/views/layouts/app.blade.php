@@ -73,15 +73,7 @@
         </nav>
         
         <main class="py-6">
-        <div class="py-3 bg-light">
-            <div class="container">
-                <ul class="nav nav-pills">
-                    <li class="nav-item"><a class="nav-link" href="">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="">About</a></li>
-                    <li class="nav-item"><a class="nav-link" href="">Contact</a></li>
-                </ul>
-            </div>
-        </div>
+        
             @yield('content')
         </main>
     </div>

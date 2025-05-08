@@ -16,11 +16,11 @@ return new class extends Migration
          $table->bigIncrements('id');
          $table->string('npk', 10);
          $table->string('nama', 100);
-            $table->string('alamat', 100);
-            $table->string('tempatlahir', 50);
-            $table->date('tanggallahir');
-            $table->string('gender', 10);
-            $table->string('nik', 16);
+         $table->string('tempatlahir', 50);
+         $table->date('tanggallahir');
+         $table->string('gender', 10);
+         $table->string('nik', 16);
+         $table->string('alamat', 100);
          $table->timestamps();
          });
     }

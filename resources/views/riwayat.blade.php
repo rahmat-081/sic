@@ -15,7 +15,7 @@
         </div>
         <div class="col-md-10">
             <div class="card">
-                <div class="card-header">{{ __('Dashboard') }}</div>
+                <div class="card-header">{{ __('Riwayat') }}</div>
 
                 <div class="card-body">
                     @if (session('status'))
@@ -25,7 +25,29 @@
                     @endif
 
                     {{ __('You are logged in!') }}
-                    sembarang
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Tanggal Pengajuan</th>
+                                <th>Tanggal Mulai</th>
+                                <th>Tanggal Selesai</th>
+                                <th>Jumlah Hari</th>
+                                <th>Sisa Cuti</th>
+                                <th>Jenis Approval</th>
+                                <th>Alasan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($history as $item)
+                            <tr>
+                                <td>{{ $item->id }}</td>
+                                <td>{{ $item->created_at }}</td>
+                                <td>{{ $item->status }}</td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
