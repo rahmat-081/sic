@@ -10,6 +10,7 @@
                     <li class="nav-item"><a class="nav-link" href="{{ route("karyawan") }}" >Karyawan</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{  route('pengajuan') }}">Pengajuan Cuti</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{  route('riwayat')}}">Riwayat Pengajuan</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{  route('jatahcuti')}}">Jatah Cuti</a></li>
                 </ul>
             </div>
         </div>

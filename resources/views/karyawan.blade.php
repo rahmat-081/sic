@@ -4,14 +4,19 @@
 <div class="container">
     <div class="row justify-content-center">
     <div class="col-md-2 bg-light">
-            <div class="container">
-                <ul class="nav flex-column">
-                    <li class="nav-item"><a class="nav-link" href="{{ route("home") }}" >Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route("karyawan") }}" >Karyawan</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{  route('pengajuan') }}">Pengajuan Cuti</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{  route('riwayat')}}">Riwayat Pengajuan</a></li>
-                </ul>
+    @include('menu')
+
+            <div class="card">
+                <div class="card-header">{{ $userkaryawan->nama }}</div>
+                <div class="card-body">
+                    <p>NPK: {{ $userkaryawan->npk }}</p>
+                    <p>Unit Kerja: {{$userkaryawan->unitkerja}}</p>
+                    <p>Jabatan: {{ $userkaryawan->jabatan }}</p>
+                    <p>Jenis Kelamin: {{ $userkaryawan->gender }}</p>
+                    <p>Alamat: {{ $userkaryawan->alamat }}</p>
+                </div>
             </div>
+
         </div>
         <div class="col-md-10">
             <div class="card">
@@ -46,6 +51,12 @@
                                 <input type="number" class="form-control" placeholder="NIK" id="nik" name="nik" aria-label="NIK" maxlength="16" oninput="if(this.value.length > 16) this.value = this.value.slice(0, 16);">
                             </div>
                             <input type="text" class="form-control" placeholder="Alamat" id="alamat" name="alamat" required>
+                            <select class="form-control mt-3" id="user" name="user" aria-label="User">
+                                <option value="">Pilih User</option>
+                                @foreach ($users as $user)
+                                    <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                @endforeach
+                            </select>
                             <input type="submit" class="btn btn-primary mt-3" value="Simpan">
                         </div>
 
@@ -54,7 +65,7 @@
 
             </div>
             <div class="card">
-                <div class="card-header">{{ __('Formulir Karyawan') }}</div>
+                <div class="card-header">{{ __('Database Karyawan') }}</div>
 
                 <div class="card-body">
                     @if (session('status'))
@@ -73,6 +84,7 @@
                                 <th>Gender</th>
                                 <th>NIK</th>
                                 <th>Alamat</th>
+                                <th>User</th>
                                 <th>Action</th>
                                 </tr>
                         </thead>
@@ -89,6 +101,12 @@
                                 <td>{{ $k->gender }}</td>
                                 <td>{{ $k->nik }}</td>
                                 <td>{{ $k->alamat }}</td>
+                                <td>
+                                    @if($k->user_id)
+                                        {{ $k->user->name }}
+                                    @else
+                                        Tidak ada user
+                                    @endif
                                 <td>{{ $k->action }}</td>
                                 <td>
                             </tr>
