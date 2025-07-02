@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\Karyawan;
+use App\Models\User;
 
 use Illuminate\Http\Request;
 
@@ -24,27 +25,23 @@ class KaryawanController extends Controller
      */
     public function index()
     {
-        // Fetch all employees from the database
-        $karyawans = Karyawan::all();
+        $authuser = auth()->user();
+        $userkaryawan = Karyawan::where('user_id', $authuser->id)->first();
+        $karyawans = Karyawan::with('user')->get();
+        $user = User::all();
+        $data=[
+            'userkaryawan' => $userkaryawan, 
+            'karyawans' => $karyawans,
+            'users' => $user,
+        ];
+
         // Pass the employees to the view
-        return view('karyawan', ['karyawans' => $karyawans]);
+        return view('karyawan', $data);
     }
 
     public function store(Request $request)
     {
-        // Validate the request data
-        // $request->validate([
-        //     'id' => 'required|integer',
-        //     'npk' => 'required|string|max:255',
-        //     'nama' => 'required|string|max:255',
-        //     'tempatlahir' => 'required|string|max:255',
-        //     'tanggallahir' => 'required|date',
-        //     'gender' => 'required|string|max:10',
-        //     'nik' => 'required|string|max:16',
-        //     'alamat' => 'required|string|max:255',
-        // ]);
         
-        // Create a new employee record
         $karyawan = new Karyawan();
         $karyawan->id = $request->input('id');
         $karyawan->npk = $request->input('npk');
@@ -54,22 +51,18 @@ class KaryawanController extends Controller
         $karyawan->gender = $request->input('gender');
         $karyawan->nik = $request->input('nik');
         $karyawan->alamat = $request->input('alamat');
+        $karyawan->user_id = $request->input('user'); 
         $karyawan->save();
-        // Return a JSON response with the newly created employee data
-        // return response()->json([
-        //     'success' => true,
-        //     'message' => 'Employee added successfully.',
-        //     'data' => $karyawan
-        // ]);
-        // Redirect back to the employee list with a success message
+
         return redirect()->route('karyawan')->with('success', 'Employee added successfully.');
     }
-    public function edit($id)
+    public function edit(Request $request, $id)    
     {
         // Find the employee by ID
         $karyawan = Karyawan::findOrFail($id);
+        $user = User::all();
         // Pass the employee to the view
-        return view('edit_karyawan', ['karyawan' => $karyawan]);
+        return view('edit_karyawan', ['karyawan' => $karyawan, 'users' => $user]);
     }
     public function update(Request $request, $id)
     {
@@ -83,6 +76,7 @@ class KaryawanController extends Controller
         $karyawan->gender = $request->input('gender');
         $karyawan->nik = $request->input('nik');
         $karyawan->alamat = $request->input('alamat');
+        $karyawan->user_id = $request->input('user'); 
         $karyawan->save();
         // Redirect back to the employee list with a success message
         return redirect()->route('karyawan')->with('success', 'Employee updated successfully.');
