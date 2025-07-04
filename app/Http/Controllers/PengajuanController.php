@@ -7,6 +7,7 @@ use App\Models\JenisCuti;
 use App\Models\JatahCuti;
 use App\Models\JenisApproval;
 
+use App\Models\RiwayatPengajuan;
 use Illuminate\Http\Request;
 
 class PengajuanController extends Controller
@@ -24,16 +25,23 @@ class PengajuanController extends Controller
         $pengajuan = PengajuanCuti::with(['karyawan', 'JenisCuti'])
             ->where('karyawan_id', $userkaryawan->id)
             ->get();
+
+        $riwayat = RiwayatPengajuan::with(['pengajuan.karyawan', 'jenis_approval', 'pengajuan.JenisCuti'])
+            ->whereHas('pengajuan.karyawan', function ($query) use ($userkaryawan) {
+                $query->where('id', $userkaryawan->id);
+            })
+            ->get();
+
         $jeniscuti = JenisCuti::all();
         $jatahcuti = JatahCuti::where('karyawan_id', $userkaryawan->id)->get();
-        $data=[
-            'histori_pengajuan' => $pengajuan,
+        $data = [
+            'histori_pengajuan' => $riwayat,
             'userkaryawan' => $userkaryawan,
             'jeniscuti' => $jeniscuti,
             'jatahcuti' => $jatahcuti,
             'sisacuti' => $jatahcuti->sum('jumlah') - $pengajuan->sum('total_hari'),
         ];
-        
+
         return view('pengajuan', $data);
     }
     public function indexsdm()
@@ -43,20 +51,21 @@ class PengajuanController extends Controller
         $pengajuan = PengajuanCuti::with(['karyawan', 'JenisCuti', 'JatahCuti'])
             ->get();
         $jeniscuti = JenisCuti::all();
-        $data=[
+        $data = [
             'histori_pengajuan' => $pengajuan,
             'userkaryawan' => $userkaryawan,
             'jeniscuti' => $jeniscuti,
+
         ];
-        
+
         return view('pengajuansdm', $data);
     }
 
     public function store(Request $request)
     {
         $pengajuan = new PengajuanCuti();
-        $pengajuan->karyawan_id = $request->input('karyawan'); 
-        $pengajuan->tanggal_pengajuan = $request-> input('tanggal_pengajuan');
+        $pengajuan->karyawan_id = $request->input('karyawan');
+        $pengajuan->tanggal_pengajuan = $request->input('tanggal_pengajuan');
         $pengajuan->jenis_cuti_id = $request->input('jenis_cuti');
         $pengajuan->jatah_cuti_id = $request->input('jatah_cuti');
         $pengajuan->mulai = $request->input('tanggal_mulai');
@@ -71,15 +80,15 @@ class PengajuanController extends Controller
 
     public function edit($id)
     {
-        
+
         $pengajuan = PengajuanCuti::findOrFail($id);
-        
+
         return view('edit_pengajuan', ['pengajuan' => $pengajuan]);
     }
 
     public function update(Request $request, $id)
     {
-    
+
         $pengajuan = \App\Models\PengajuanCuti::findOrFail($id);
         $pengajuan->jenis_cuti = $request->input('jenis_cuti');
         $pengajuan->tanggal_pengajuan = $request->input('tanggal_pengajuan');
@@ -99,8 +108,8 @@ class PengajuanController extends Controller
 
         return redirect()->route('pengajuan')->with('success', 'Pengajuan berhasil dihapus.');
     }
-    
-   
+
+
     public function show($id)
     {
         // Find the pengajuan by ID

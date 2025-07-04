@@ -114,15 +114,15 @@
                             @foreach($histori_pengajuan as $item)
                                 <tr>
                                     <td>{{ $item->id }}</td>
-                                    <td>{{ $item->tanggal_pengajuan }}</td>
-                                    <td>{{ $item->jeniscuti->nama }}</td>
-                                    <td>{{ $item->mulai }}</td>
-                                    <td>{{ $item->selesai }}</td>
-                                    <td>{{ $item->total_hari }}</td>
-                                    <td>{{ $item->alamat }}</td>
-                                    <td>{{ $item->jenis_approval }}</td>
-                                    <td>{{ $item->alasan }}</td>
-                                    <td>{{ $item->keterangan }}</td>
+                                    <td>{{ $item->pengajuan->tanggal_pengajuan }}</td>
+                                    <td>{{ $item->pengajuan->jeniscuti->nama }}</td>
+                                    <td>{{ $item->pengajuan->mulai }}</td>
+                                    <td>{{ $item->pengajuan->selesai }}</td>
+                                    <td>{{ $item->pengajuan->total_hari }}</td>
+                                    <td>{{ $item->pengajuan->alamat }}</td>
+                                    <td>{{ $item->jenis_approval->nama }}</td>
+                                    <td>{{ $item->pengajuan->alasan }}</td>
+                                    <td>{{ $item->pengajuan->keterangan }}</td>
                                 </tr>
                             @endforeach
                         </tbody>

@@ -34,4 +34,8 @@ class PengajuanCuti extends Model
         return $this->belongsTo(JatahCuti::class, 'jatah_cuti_id');
     }
 
+    public function RiwayatPengajuan(){
+        return $this->hasMany(RiwayatPengajuan::class, 'pengajuan_id');
+    }
+
 }

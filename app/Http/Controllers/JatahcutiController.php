@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
-use App\Models\Jatahcuti;
+use App\Models\JatahCuti;
 use App\Models\Karyawan;
 use App\Models\User;
 use App\Models\JenisCuti;
@@ -13,7 +13,7 @@ class JatahcutiController extends Controller
 {
     public function index()
     {
-        $jatahcuti = Jatahcuti::with(['karyawan', 'jenisCuti'])->get();
+        $jatahcuti = JatahCuti::with(['karyawan', 'jenisCuti'])->get();
         $karyawan = Karyawan::all();
         $jeniscuti = JenisCuti::all();
         $authuser = auth()->user();

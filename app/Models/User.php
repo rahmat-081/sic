@@ -44,4 +44,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    public function karyawan()
+    {
+        return $this->hasOne(\App\Models\Karyawan::class, 'user_id');
+    }
+
 }

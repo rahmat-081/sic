@@ -23,11 +23,13 @@ class RiwayatJabatan extends Model
 
     public function jabatan()
     {
-        return $this->belongsTo(Jabatan::class, 'jabatan_id');
+        return $this->belongsTo(JenisJabatan::class, 'jenis_jabatan_id');
     }
 
     public function unitKerja()
     {
         return $this->belongsTo(UnitKerja::class, 'unit_kerja_id');
     }
+
+    
 }

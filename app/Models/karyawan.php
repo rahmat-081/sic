@@ -21,5 +21,11 @@ class karyawan extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
-    
+
+    public function riwayat_jabatan()
+    {
+        return $this->hasMany(\App\Models\RiwayatJabatan::class, 'karyawan_id');
+    }
+
+
 }
