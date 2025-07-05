@@ -6,8 +6,9 @@ use App\Models\Karyawan;
 use App\Models\JenisCuti;
 use App\Models\JatahCuti;
 use App\Models\JenisApproval;
-
+use DB;
 use App\Models\RiwayatPengajuan;
+use App\Models\RiwayatJabatan;
 use Illuminate\Http\Request;
 
 class PengajuanController extends Controller
@@ -22,49 +23,63 @@ class PengajuanController extends Controller
     {
         $authuser = auth()->user();
         $userkaryawan = Karyawan::where('user_id', $authuser->id)->first();
-        $pengajuan = PengajuanCuti::with(['karyawan', 'JenisCuti'])
-            ->where('karyawan_id', $userkaryawan->id)
-            ->get();
 
-        $riwayat = RiwayatPengajuan::with(['pengajuan.karyawan', 'jenis_approval', 'pengajuan.JenisCuti'])
-            ->whereHas('pengajuan.karyawan', function ($query) use ($userkaryawan) {
-                $query->where('id', $userkaryawan->id);
-            })
+        $biodata = DB::table('karyawan as k')
+            ->leftJoin('riwayat_jabatan as rj', 'rj.karyawan_id', '=', 'k.id')
+            ->leftJoin('unit_kerja as u', 'u.id', '=', 'rj.unit_kerja_id')
+            ->leftJoin('jenis_jabatan as jj', 'jj.id', '=', 'rj.jenis_jabatan_id')
+            ->where('k.id', $userkaryawan->id)
+            ->select(
+                'k.nama as nama_karyawan',
+                'k.npk',
+                'jj.nama as jabatan',
+                'k.gender',
+                'k.alamat as alamat_karyawan',
+                'u.nama as unitkerja'
+            )
+            ->orderByDesc('rj.created_at')
+            ->first();
+
+
+        $riwayat = DB::table('pengajuan_cuti as p')
+            ->join('jenis_cuti as je', 'je.id', '=', 'p.jenis_cuti_id')
+            ->leftJoin('riwayat_pengajuan as rp', 'rp.pengajuan_id', '=', 'p.id')
+            ->leftJoin('jenis_approval as j', 'j.id', '=', 'rp.jenis_approval_id')
+            ->where('p.karyawan_id', $userkaryawan->id)
+            ->select(
+                'p.id',
+                'p.tanggal_pengajuan',
+                'je.nama as jeniscuti',
+                'p.mulai',
+                'p.selesai',
+                'p.total_hari',
+                'p.alamat',
+                'j.nama as jenis_approval',
+                'p.alasan'
+            )
+            ->orderByDesc('p.tanggal_pengajuan')
             ->get();
 
         $jeniscuti = JenisCuti::all();
         $jatahcuti = JatahCuti::where('karyawan_id', $userkaryawan->id)->get();
-        $data = [
-            'histori_pengajuan' => $riwayat,
-            'userkaryawan' => $userkaryawan,
-            'jeniscuti' => $jeniscuti,
-            'jatahcuti' => $jatahcuti,
-            'sisacuti' => $jatahcuti->sum('jumlah') - $pengajuan->sum('total_hari'),
-        ];
+        $pengajuan = PengajuanCuti::where('karyawan_id', $userkaryawan->id)->get();
 
-        return view('pengajuan', $data);
-    }
-    public function indexsdm()
-    {
-        $authuser = auth()->user();
-        $userkaryawan = Karyawan::where('user_id', $authuser->id)->first();
-        $pengajuan = PengajuanCuti::with(['karyawan', 'JenisCuti', 'JatahCuti'])
-            ->get();
-        $jeniscuti = JenisCuti::all();
-        $data = [
-            'histori_pengajuan' => $pengajuan,
-            'userkaryawan' => $userkaryawan,
-            'jeniscuti' => $jeniscuti,
+        $sisacuti = $jatahcuti->sum('jumlah') - $pengajuan->sum('total_hari');
 
-        ];
-
-        return view('pengajuansdm', $data);
+        return view('pengajuan', compact(
+            'biodata',
+            'riwayat',
+            'jeniscuti',
+            'jatahcuti',
+            'sisacuti',
+            'userkaryawan'
+        ));
     }
 
     public function store(Request $request)
     {
         $pengajuan = new PengajuanCuti();
-        $pengajuan->karyawan_id = $request->input('karyawan');
+        $pengajuan->karyawan_id = auth()->user()->karyawan->id;
         $pengajuan->tanggal_pengajuan = $request->input('tanggal_pengajuan');
         $pengajuan->jenis_cuti_id = $request->input('jenis_cuti');
         $pengajuan->jatah_cuti_id = $request->input('jatah_cuti');
@@ -74,6 +89,13 @@ class PengajuanController extends Controller
         $pengajuan->alamat = $request->input('alamat_cuti');
         $pengajuan->alasan = $request->input('alasan');
         $pengajuan->save();
+
+        $riwayat = RiwayatJabatan::find($pengajuan->karyawan_id);
+        if ($riwayat->unitKerja->nama == 'SDM') {
+            return redirect()->route('sdm.pengajuan')->with('success', 'Pengajuan berhasil dibuat');
+        } elseif ($riwayat->jabatan->nama == 'Direktur') {
+            return redirect()->route('atasan.pengajuan')->with('success', 'Pengajuan berhasil dibuat');
+        }
 
         return redirect()->route('pengajuan')->with('success', 'Pengajuan berhasil dibuat.');
     }

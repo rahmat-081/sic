@@ -51,7 +51,7 @@
                         </div>
                         <div class="form-group">
                             <label for="tahun">Tahun</label>
-                            <input type="number" class="form-control" id="tahun" name="tahun" required>
+                            <input type="date" class="form-control" id="tahun" name="tahun" required>
                         </div>
                         <div class="form-group">
                             <label for="jumlah">Jumlah</label>
