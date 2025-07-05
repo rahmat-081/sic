@@ -14,7 +14,7 @@ Route::middleware(['auth', 'check.level:Direktur'])->group(function () {
     Route::get('/atasan/approve/edit/{id}', [App\Http\Controllers\RiwayatController::class, 'edit'])->name('approve.edit');
     Route::post('/atasan/approve/update/{id}', [App\Http\Controllers\RiwayatController::class, 'update'])->name('approve.update');
     Route::get('/atasan/pengajuan', [App\Http\Controllers\PengajuanController::class, 'index'])->name('atasan.pengajuan');
-    Route::post('/atasan/pengajuan/store', [App\Http\Controllers\PengajuanController::class, 'store'])->name('pengajuan.store');
+    Route::post('/atasan/pengajuan/store', [App\Http\Controllers\PengajuanController::class, 'store'])->name('atasan.pengajuan.store');
     Route::get('/struktur-organisasi', [App\Http\Controllers\StrukturOrganisasiController::class, 'index'])->name('strukturorganisasi');
     Route::post('/struktur-organisasi/store', [App\Http\Controllers\StrukturOrganisasiController::class, 'store'])->name('strukturorganisasi.store');
 });
