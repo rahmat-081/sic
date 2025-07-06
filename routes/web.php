@@ -7,7 +7,7 @@ Route::get('/', function () {
 });
 
 Auth::routes();
-Route::middleware(['auth', 'check.level:Direktur'])->group(function () {
+Route::middleware(['auth', 'check.level:Direktur,Kepala Regu,Kepala Seksi,Manager'])->group(function () {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::get('/atasan/approve/pengajuan', [App\Http\Controllers\RiwayatController::class, 'index'])->name('approve.pengajuan');
     Route::post('/atasan/approve/store', [App\Http\Controllers\RiwayatController::class, 'store'])->name('approve.store');
@@ -15,8 +15,8 @@ Route::middleware(['auth', 'check.level:Direktur'])->group(function () {
     Route::post('/atasan/approve/update/{id}', [App\Http\Controllers\RiwayatController::class, 'update'])->name('approve.update');
     Route::get('/atasan/pengajuan', [App\Http\Controllers\PengajuanController::class, 'index'])->name('atasan.pengajuan');
     Route::post('/atasan/pengajuan/store', [App\Http\Controllers\PengajuanController::class, 'store'])->name('atasan.pengajuan.store');
-    Route::get('/struktur-organisasi', [App\Http\Controllers\StrukturOrganisasiController::class, 'index'])->name('strukturorganisasi');
-    Route::post('/struktur-organisasi/store', [App\Http\Controllers\StrukturOrganisasiController::class, 'store'])->name('strukturorganisasi.store');
+    Route::get('/atasan/struktur-organisasi', [App\Http\Controllers\StrukturOrganisasiController::class, 'index'])->name('atasan.strukturorganisasi');
+    Route::post('/atasan/struktur-organisasi/store', [App\Http\Controllers\StrukturOrganisasiController::class, 'store'])->name('atasan.strukturorganisasi.store');
 });
 
 Route::middleware(['auth', 'check.level:unit:SDM'])->group(function () {
@@ -36,7 +36,7 @@ Route::middleware(['auth', 'check.level:unit:SDM'])->group(function () {
 
 });
 
-Route::middleware(['auth', 'check.level:Pelaksana,Kepala Regu,Kepala Seksi,Manager'])->group(function () {
+Route::middleware(['auth', 'check.level:Pelaksana'])->group(function () {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::get('/karyawan/pengajuan', [App\Http\Controllers\PengajuanController::class, 'index'])->name('pengajuan');
     Route::post('/karyawan/pengajuan/store', [App\Http\Controllers\PengajuanController::class, 'store'])->name('pengajuan.store');

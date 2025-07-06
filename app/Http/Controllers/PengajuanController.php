@@ -91,9 +91,9 @@ class PengajuanController extends Controller
         $pengajuan->save();
 
         $riwayat = RiwayatJabatan::find($pengajuan->karyawan_id);
-        if ($riwayat->unitKerja->nama == 'SDM') {
+        if ($riwayat->unitKerja->nama == 'SDM' and $riwayat->jabatan->nama == 'Pelaksana') {
             return redirect()->route('sdm.pengajuan')->with('success', 'Pengajuan berhasil dibuat');
-        } elseif ($riwayat->jabatan->nama == 'Direktur') {
+        } elseif ($riwayat->jabatan->nama != 'Pelaksana') {
             return redirect()->route('atasan.pengajuan')->with('success', 'Pengajuan berhasil dibuat');
         }
 

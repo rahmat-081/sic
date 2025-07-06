@@ -1,3 +1,15 @@
+@php
+
+    $route_store = '';
+
+
+    if ($jenisJabatan !== 'Pelaksana') {
+        $route_store = route('atasan.strukturorganisasi.store');
+    } else {
+        $route_store = route('strukturorganisasi.store');
+    }
+
+@endphp
 @extends('layouts.app')
 
 @section('content')
@@ -17,7 +29,7 @@
                             {{ session('status') }}
                         </div>
                     @endif
-                    <form method="POST" action="{{ route('strukturorganisasi.store') }}">
+                    <form method="POST" action="{{ $route_store }}">
                         @csrf
                         <div class="form-group">
                             <label for="nama">Nama</label>

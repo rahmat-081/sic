@@ -2,7 +2,7 @@
 
     $route_store = '';
 
-    if ($jenisJabatan == 'Direktur') {
+    if ($jenisJabatan !== 'Pelaksana') {
         $route_store = route('atasan.pengajuan.store');
     } elseif ($unitKerja == 'SDM') {
         $route_store = route('sdm.pengajuan.store');
