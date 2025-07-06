@@ -2,13 +2,11 @@
 
     $route_store = '';
 
-
     if ($jenisJabatan !== 'Pelaksana') {
         $route_store = route('atasan.strukturorganisasi.store');
     } else {
         $route_store = route('strukturorganisasi.store');
     }
-
 @endphp
 @extends('layouts.app')
 
@@ -67,7 +65,6 @@
                                 <th>Jenis Organisasi</th>
                                 <th>Nama</th>
                                 <th>Induk</th>
-                               
                             </tr>
                         </thead>
                         <tbody>
