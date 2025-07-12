@@ -76,6 +76,7 @@ class PengajuanController extends Controller
         ));
     }
 
+
     public function store(Request $request)
     {
         $pengajuan = new PengajuanCuti();

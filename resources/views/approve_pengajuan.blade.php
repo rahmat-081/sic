@@ -24,18 +24,19 @@
                                     @foreach ($pengajuan as $user)
                                         @if ($user->karyawan)
                                             <option value="{{ $user->id }}">
-                                                {{ $user->karyawan->nama }}
+                                                {{ $user->id }} - {{ $user->karyawan->nama }}
                                             </option>
                                         @endif
                                     @endforeach
 
                                 </select>
-                                <select class="form-control mt-3" id="jenis_approval" name="jenis_approval" aria-label="Pengajuan">
+                                <select class="form-control mt-3" id="jenis_approval" name="jenis_approval"
+                                    aria-label="Pengajuan">
                                     <option value="">Jenis Approval</option>
                                     @foreach ($jenis_approval as $user)
-                                            <option value="{{ $user->id }}">
-                                                {{ $user->nama }}
-                                            </option>
+                                        <option value="{{ $user->id }}">
+                                            {{ $user->nama }}
+                                        </option>
                                     @endforeach
                                 </select>
                                 <div class="input-group mb-3">
@@ -70,7 +71,8 @@
                                         <td>{{ $item->pengajuan->karyawan->nama }}</td>
                                         <td>{{ $item->jenis_approval->nama }}</td>
                                         <td>{{ $item->alasan }}</td>
-                                        <td><a href="{{ route('approve.edit', $item->id) }}" class="btn btn-warning">Edit</a></td>
+                                        <td><a href="{{ route('approve.edit', $item->id) }}" class="btn btn-warning">Edit</a>
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
