@@ -17,6 +17,7 @@ Route::middleware(['auth', 'check.level:Direktur,Kepala Regu,Kepala Seksi,Manage
     Route::post('/atasan/pengajuan/store', [App\Http\Controllers\PengajuanController::class, 'store'])->name('atasan.pengajuan.store');
     Route::get('/atasan/struktur-organisasi', [App\Http\Controllers\StrukturOrganisasiController::class, 'index'])->name('atasan.strukturorganisasi');
     Route::post('/atasan/struktur-organisasi/store', [App\Http\Controllers\StrukturOrganisasiController::class, 'store'])->name('atasan.strukturorganisasi.store');
+    Route::get('/atasan/riwayat',[App\Http\Controllers\RiwayatController::class,'show_atasan'])->name('atasan.riwayat');
 });
 
 Route::middleware(['auth', 'check.level:unit:SDM'])->group(function () {
@@ -33,7 +34,11 @@ Route::middleware(['auth', 'check.level:unit:SDM'])->group(function () {
     Route::post('/jatahcuti/store', [App\Http\Controllers\JatahcutiController::class, 'store'])->name('jatahcuti.store');
     Route::get('/struktur-organisasi', [App\Http\Controllers\StrukturOrganisasiController::class, 'index'])->name('strukturorganisasi');
     Route::post('/struktur-organisasi/store', [App\Http\Controllers\StrukturOrganisasiController::class, 'store'])->name('strukturorganisasi.store');
-
+    Route::get('/sdm/riwayat',[App\Http\Controllers\RiwayatController::class,'show'])->name('sdm.riwayat');
+    Route::get('/sdm/jabatan',[App\Http\Controllers\RiwayatJabatanController::class,'index'])->name('jabatan');
+    Route::post('/sdm/jabatan/store', [App\Http\Controllers\RiwayatJabatanController::class, 'store'])->name('jabatan.store');
+    Route::get('/sdm/jabatan/edit/{id}', [App\Http\Controllers\RiwayatJabatanController::class,'edit'])->name('jabatan.edit');
+    Route::post('/sdm/jabatan/update/{id}', [App\Http\Controllers\RiwayatJabatanController::class,'update'])->name('jabatan.update');
 });
 
 Route::middleware(['auth', 'check.level:Pelaksana'])->group(function () {
