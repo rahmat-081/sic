@@ -104,13 +104,20 @@ class RiwayatController extends Controller
     public function show()
     {
         $riwayat = DB::table('pengajuan_cuti as p')
+            ->join('karyawan as k', 'k.id', '=', 'p.karyawan_id')
             ->join('jenis_cuti as je', 'je.id', '=', 'p.jenis_cuti_id')
             ->leftJoin('riwayat_pengajuan as rp', 'rp.pengajuan_id', '=', 'p.id')
             ->leftJoin('jenis_approval as j', 'j.id', '=', 'rp.jenis_approval_id')
+            ->join('riwayat_jabatan as rj','k.id','=','rj.karyawan_id')
+            ->join('unit_kerja as u', 'u.id','=','rj.unit_kerja_id')
+            ->join('jenis_jabatan as jj', 'jj.id', '=', 'rj.jenis_jabatan_id')
             ->select(
                 'p.id',
                 'p.tanggal_pengajuan',
+                'k.nama as karyawan',
+                'u.nama as unit_kerja',
                 'je.nama as jeniscuti',
+                'jj.nama as jenis_jabatan',
                 'p.mulai',
                 'p.selesai',
                 'p.total_hari',
